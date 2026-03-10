@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Book Room</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/hotel-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Overlay */
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Mobile Glass Form */
+.form-container {
+    width: 100%;
+    max-width: 420px; /* Perfect mobile width */
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+    color: rgb(0, 0, 0);
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Labels */
+label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+/* Date height fix */
+input[type="date"] {
+    height: 42px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <div class="form-container">
+
+		<h2>Room Booking</h2>
+
+		<form action="/booking" method="post">
+
+		    <label>Room Number</label><br>
+		    <input type="text" name="roomNumber" required><br><br>
+
+		    <label>Customer Name</label><br>
+		    <input type="text" name="customerName" required><br><br>
+
+		    <label>Check-In Date</label><br>
+		    <input type="date" name="checkInDate" required><br><br>
+
+		    <label>Check-Out Date</label><br>
+		    <input type="date" name="checkOutDate" required><br><br>
+
+		    <label>Price Per Day</label><br>
+		    <input type="number" name="pricePerDay" required><br><br>
+
+		    <button type="submit">Book Room</button>
+
+		</form>
+    </div>
+</div>
+
+</body>
+</html>

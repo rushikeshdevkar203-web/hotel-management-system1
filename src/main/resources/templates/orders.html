@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<title>Orders</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:url('/images/hotel-bg.jpg') no-repeat center center fixed;
+    background-size:cover;
+}
+
+/* Dark overlay */
+
+.overlay{
+    background:rgba(0,0,0,0.4);
+    min-height:100vh;
+    padding-top:60px;
+}
+
+/* Title */
+
+h2{
+    text-align:center;
+    color:white;
+    margin-bottom:30px;
+    font-size:32px;
+}
+
+/* Glass table container */
+
+.glass-table{
+    width:90%;
+    margin:auto;
+    padding:25px;
+
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+
+    border-radius:10px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Table */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    color:white;
+}
+
+th,td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+th{
+    background:rgba(0,0,0,0.4);
+}
+
+/* Hover */
+
+tr:hover{
+    background:rgba(255,255,255,0.1);
+}
+
+/* Button */
+
+.btn-box{
+    text-align:center;
+    margin-top:25px;
+}
+
+button{
+    padding:10px 20px;
+    background:#007bff;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+<h2>📋 Total Orders</h2>
+
+<div class="glass-table">
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Customer</th>
+<th>Mobile</th>
+<th>Room</th>
+<th>Product</th>
+<th>Qty</th>
+<th>Total</th>
+<th>Time</th>
+</tr>
+
+<tr th:each="o : ${orders}">
+<td th:text="${o.id}"></td>
+<td th:text="${o.customerName}"></td>
+<td th:text="${o.customerMobile}"></td>
+<td th:text="${o.roomNumber}"></td>
+<td th:text="${o.productName}"></td>
+<td th:text="${o.quantity}"></td>
+<td th:text="${o.totalPrice}"></td>
+<td th:text="${o.orderTime}"></td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="btn-box">
+<a href="/products">
+<button>⬅ Back</button>
+</a>
+</div>
+
+</div>
+
+</body>
+</html>

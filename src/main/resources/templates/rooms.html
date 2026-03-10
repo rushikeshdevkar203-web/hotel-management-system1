@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Rooms</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/hotel-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Overlay */
+.overlay {
+    background: rgba(0, 0, 0, 0.65);
+    min-height: 100vh;
+    padding: 20px 10px 40px;
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* Add Button */
+.top-btn {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+a.button-link {
+    display: inline-block;
+    padding: 10px 16px;
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Table Container Scroll */
+.table-container {
+    width: 100%;
+    overflow-x: auto;      /* IMPORTANT for mobile */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+/* Table */
+table {
+    width: 100%;
+    min-width: 600px;      /* prevents breaking */
+    border-collapse: collapse;
+    color: white;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: rgba(0, 123, 255, 0.8);
+    font-size: 14px;
+}
+
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+tr:hover {
+    background: rgba(0, 123, 255, 0.2);
+}
+
+/* Edit Button */
+td a {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+    <h2>Room List</h2>
+
+    <div class="top-btn">
+        <a href="/add-room" class="button-link">+ Add Room</a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Room No</th>
+                <th>Room Type</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.id}"></td>
+                <td th:text="${room.roomNumber}"></td>
+                <td th:text="${room.roomType}"></td>
+                <td th:text="${room.price}"></td>
+                <td th:text="${room.status}"></td>
+                <td>
+                    <a th:href="@{'/edit-room/' + ${room.id}}" class="button-link">Edit</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

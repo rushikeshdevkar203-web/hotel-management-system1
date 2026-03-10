@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Edit Booking</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:url('/images/hotel-bg.jpg');
+background-size:cover;
+background-position:center;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:0;
+}
+
+/* Glass Card */
+
+.container{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:15px;
+width:350px;
+color:white;
+box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:5px;
+background:rgba(255,255,255,0.2);
+color:white;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:5px;
+background:#00c6ff;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#0072ff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 style="text-align:center;">Update Booking</h2>
+
+<form th:action="@{/updateBooking/{id}(id=${booking.id})}" method="post">
+
+<input type="text"
+       name="customerName"
+       th:value="${booking.customerName}"
+       placeholder="Customer Name"
+       required>
+
+<!-- Room Dropdown -->
+
+<select name="roomNumber" required>
+
+<option value="">Select Room</option>
+
+<option th:each="room : ${rooms}"
+        th:value="${room.roomNumber}"
+        th:text="${room.roomNumber}">
+</option>
+
+</select>
+
+<input type="date"
+       name="checkInDate"
+       th:value="${booking.checkInDate}"
+       required>
+
+<input type="date"
+       name="checkOutDate"
+       th:value="${booking.checkOutDate}"
+       required>
+
+<input type="number"
+       name="pricePerDay"
+       th:value="${booking.pricePerDay}"
+       placeholder="Price Per Day"
+       required>
+
+<button type="submit">Update Booking</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

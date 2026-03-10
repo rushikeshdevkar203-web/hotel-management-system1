@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Management System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url('/images/hotel-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    .overlay {
+      background: rgba(0,0,0,0.5);
+      min-height: 100vh;
+      padding-bottom: 70px;
+    }
+
+    /* Topbar */
+    .topbar {
+      background: rgba(0,0,0,0.95);
+      color: white;
+      padding: 12px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-title {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    #clock {
+      font-size: 14px;
+      margin-top: 5px;
+      color: #00ffcc;
+    }
+
+    .marquee-text {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #00ff99;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: scroll 18s linear infinite;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* Dashboard Grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Glass Buttons and Cards */
+    .glass-btn, .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+      transition: 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .glass-btn:hover, .glass-card:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-5px);
+    }
+
+    /* Content Section */
+    .content {
+      text-align: center;
+      color: white;
+      padding: 30px 20px;
+    }
+
+    .content h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .content h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      font-size: 16px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #000;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 12px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .footer span {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="overlay">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-title">HOTEL MANAGEMENT SYSTEM</div>
+      <div class="marquee-text">
+        Luxury Rooms | 24/7 Service | Best Hospitality | Owner: Rushikesh Devkar | Contact: 8262895492
+      </div>
+      <div id="clock"></div>
+    </div>
+
+    <!-- Dashboard Buttons & Cards -->
+    <div class="menu-grid">
+
+      <a th:href="@{/add-room}" class="glass-btn">
+        <i class="fa-solid fa-plus"></i> Add Room
+      </a>
+
+      <a th:href="@{/rooms}" class="glass-btn">
+        <i class="fa-solid fa-bed"></i> View Rooms
+      </a>
+
+      <a th:href="@{/booking}" class="glass-btn">
+        <i class="fa-solid fa-calendar-check"></i> Book Room
+      </a>
+
+      <a th:href="@{/bookings}" class="glass-btn">
+        <i class="fa-solid fa-chart-column"></i> View Bookings
+      </a>
+
+      <a th:href="@{/orders}" class="glass-btn">
+        <i class="fa-solid fa-receipt"></i> Total Orders
+      </a>
+
+      <a th:href="@{/billing}" class="glass-btn">
+        <i class="fa-solid fa-money-bill"></i> Billing System
+      </a>
+
+      <!-- Card -->
+      <div class="glass-card">
+        <h3>Total Orders</h3>
+        <h2 th:text="${totalOrders}">0</h2>
+      </div>
+
+      <a th:href="@{/add-product}" class="glass-btn">
+        <i class="fa-solid fa-utensils"></i> Add Product / Menu
+      </a>
+
+      <a th:href="@{/products}" class="glass-btn">
+        <i class="fa-solid fa-list"></i> View Products
+      </a>
+
+      <a th:href="@{/login}" class="glass-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+
+    </div>
+
+    <!-- Welcome Content -->
+    <div class="content">
+      <h1>Welcome To Rushi's Hotel</h1>
+      <h3>Our Service Is Always Available 24/7</h3>
+      <p>Manage Rooms | Bookings | Customers | Menu Easily</p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2026 Rushi's Hotel | Designed by: <span>Rushikesh Devkar</span>
+  </div>
+
+  <!-- Clock Script -->
+  <script>
+    function updateClock(){
+      const now = new Date();
+      document.getElementById("clock").innerHTML =
+        now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+</body>
+</html>

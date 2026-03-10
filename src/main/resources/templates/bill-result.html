@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Room Bill</title>
+</head>
+
+<body>
+
+<h2>Room Bill</h2>
+
+Room Number: <span th:text="${roomNumber}"></span>
+
+<table border="1">
+<tr>
+<th>Product</th>
+<th>Qty</th>
+<th>Price</th>
+</tr>
+
+<tr th:each="o : ${orders}">
+<td th:text="${o.productName}"></td>
+<td th:text="${o.quantity}"></td>
+<td th:text="${o.totalPrice}"></td>
+</tr>
+
+</table>
+
+<h3>Total Bill: ₹ <span th:text="${total}"></span></h3>
+
+</body>
+</html>

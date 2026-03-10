@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Room Bill</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:url('/images/hotel-bg.jpg');
+background-size:cover;
+background-position:center;
+height:100vh;
+margin:0;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* Overlay */
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Glass Container */
+
+.container{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(12px);
+border-radius:15px;
+padding:30px;
+width:90%;
+max-width:850px;
+box-shadow:0 8px 32px rgba(0,0,0,0.4);
+color:rgb(0, 0, 0);
+}
+
+/* Title */
+
+h2{
+text-align:center;
+margin-bottom:15px;
+}
+
+/* Room Number */
+
+p{
+font-size:18px;
+margin-bottom:10px;
+}
+
+/* Table */
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:10px;
+text-align:center;
+}
+
+th{
+background:rgba(0,0,0,0.5);
+}
+
+td{
+border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+/* Bill Summary */
+
+.summary{
+margin-top:20px;
+text-align:center;
+}
+
+.summary h3{
+margin:6px 0;
+}
+
+.summary h2{
+margin-top:10px;
+}
+
+/* Button */
+
+button{
+margin-top:20px;
+padding:12px;
+width:100%;
+border:none;
+border-radius:6px;
+background:#00c6ff;
+color:rgb(0, 0, 0);
+font-weight:bold;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#0072ff;
+}
+
+/* PRINT STYLE */
+
+@media print{
+
+body{
+background:white;
+display:block;
+}
+
+.container{
+background:white;
+color:black;
+box-shadow:none;
+width:80%;
+margin:auto;
+padding:20px;
+}
+
+table{
+font-size:14px;
+}
+
+th{
+background:#333;
+color:white;
+}
+
+button{
+display:none;
+}
+
+}
+
+/* PAPER SIZE */
+
+@page{
+size:A4;
+margin:15mm;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🧾 Room Bill</h2>
+
+<p>
+	<b>Room Number :</b>
+	 <span th:text="${roomNumber}"></span></p>
+
+<table>
+<tr>
+<th>Product</th>
+<th>Quantity</th>
+<th>Price</th>
+<th>Total</th>
+</tr>
+
+<tr th:each="order : ${orders}">
+<td th:text="${order.productName}"></td>
+<td th:text="${order.quantity}"></td>
+<td th:text="${order.totalPrice}"></td>
+<td th:text="${order.totalPrice * order.quantity}"></td>
+</tr>
+
+</table>
+
+<div class="summary">
+
+<h3>Food Total : ₹ <span th:text="${foodTotal}"></span></h3>
+
+<h3>Room Rent : ₹ <span th:text="${roomRent}"></span></h3>
+
+<h2>Total Bill : ₹ <span th:text="${totalBill}"></span></h2>
+
+</div>
+
+<button onclick="printBill()">🖨 Print Bill</button>
+
+</div>
+
+<script>
+function printBill(){
+window.print();
+}
+</script>
+
+</body>
+</html>

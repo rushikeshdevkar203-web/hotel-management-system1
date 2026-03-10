@@ -1,0 +1,169 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><head>
+<title>Food Order System</title>
+
+<style>
+
+/* ===== BODY BACKGROUND ===== */
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:url('/images/hotel-bg.jpg') no-repeat center center fixed;
+    background-size:cover;
+}
+
+/* ===== DARK OVERLAY ===== */
+
+.overlay{
+    background:rgba(0,0,0,0.45);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* ===== MAIN CONTAINER ===== */
+
+.container{
+    width:90%;
+    max-width:900px;
+}
+
+/* ===== TITLE ===== */
+
+h2{
+    text-align:center;
+    color:white;
+    margin-bottom:25px;
+}
+
+/* ===== GLASS CARD ===== */
+
+.glass-card{
+    background:rgba(255,255,255,0.15);
+    border-radius:15px;
+    backdrop-filter:blur(12px);
+    padding:30px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.4);
+    color:white;
+}
+
+/* ===== PRODUCT TABLE ===== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:25px;
+}
+
+th,td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+th{
+    background:rgba(0,0,0,0.4);
+}
+
+/* ===== INPUTS ===== */
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:none;
+    border-radius:6px;
+    background:rgb(0, 0, 0);
+    color:white;
+}
+
+input::placeholder{
+    color:#eee;
+}
+
+/* ===== BUTTON ===== */
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#00c6ff;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#0072ff;
+}
+
+/* ===== VIEW ORDERS LINK ===== */
+
+.view-btn{
+    margin-top:18px;
+    text-align:center;
+}
+
+.view-btn a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.view-btn a:hover{
+    text-decoration:underline;
+}
+
+</style>
+</head>
+<body>
+	<div class="overlay">
+		<div class="container">
+			<h2>🍽 Food Order System</h2>
+			<div class="glass-card">
+				<!-- PRODUCT TABLE -->
+				<table>
+					<tr>
+<th>Product</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Action</th>
+
+</tr>
+<tr th:each="p : ${products}" th:if="${p != null}">
+<td th:text="${p.name}"></td>
+<td th:text="${p.price}"></td>
+<td th:text="${p.stockQuantity}"></td>
+<td>
+        <a th:href="@{/deleteProduct/{id}(id=${p.id})}">Delete</a>
+    </td>
+</tr>
+</table>
+<!-- ORDER FORM -->
+<form action="/order" method="post">
+	<select name="productId" required>
+<option value="">Select Product</option>
+<option th:each="p : ${products}"
+        th:value="${p.id}"
+        th:text="${p.name}">
+</option>
+</select>
+<input type="text" name="customerName" placeholder="Customer Name" required>
+<input type="text" name="customerMobile" placeholder="Mobile Number" required>
+<input type="text" name="roomNumber" placeholder="Room Number" required>
+<input type="number" name="quantity" placeholder="Quantity" required>
+<button type="submit">Place Order</button>
+
+</form>
+<!-- VIEW ORDERS -->
+<div class="view-btn">
+<a href="/orders">📋 View Orders</a>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<title>Room Bookings</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:url('/images/hotel-bg.jpg');
+background-size:cover;
+background-position:center;
+margin:0;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* Overlay */
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Glass Container */
+
+.container{
+width:95%;
+max-width:1100px;
+padding:30px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(12px);
+border-radius:15px;
+box-shadow:0 8px 32px rgba(0,0,0,0.4);
+color:white;
+}
+
+/* Title */
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+/* Table */
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+}
+
+th{
+background:rgba(0,0,0,0.5);
+color:white;
+}
+
+td{
+border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+/* Hover effect */
+
+tr:hover{
+background:rgba(255,255,255,0.1);
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+table{
+font-size:14px;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🏨 Room Bookings</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Room Number</th>
+<th>Customer</th>
+<th>Check In</th>
+<th>Check Out</th>
+<th>Price Per Day</th>
+<th>Status</th>
+<th>Update</th>
+</tr>
+
+<tr th:each="booking : ${bookings}">
+<td th:text="${booking.id}"></td>
+<td th:text="${booking.roomNumber}"></td>
+<td th:text="${booking.customerName}"></td>
+<td th:text="${booking.checkInDate}"></td>
+<td th:text="${booking.checkOutDate}"></td>
+<td>₹ <span th:text="${booking.pricePerDay}"></span></td>
+<td th:text="${booking.statusMessage}"></td>
+
+<td>
+
+<a th:href="@{/editBooking/{id}(id=${booking.id})}">
+<button style="background:#ffc107;">Update</button>
+</a>
+
+<a th:href="@{/deleteBooking/{id}(id=${booking.id})}">
+<button style="background:#dc3545;">Delete</button>
+</a>
+
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>
+</html>
