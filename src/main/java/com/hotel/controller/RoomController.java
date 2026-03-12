@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.hotel.entity.Room;
 import com.hotel.entity.Booking;
 import com.hotel.repository.RoomRepository;
@@ -21,10 +24,17 @@ public class RoomController {
     @Autowired
     private BookingRepository bookingRepository;
 
-    // Show All Rooms
+    // Show Only Logged User Rooms
     @GetMapping("/rooms")
     public String viewRooms(Model model) {
-        model.addAttribute("rooms", roomRepository.findAll());
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        List<Room> rooms = roomRepository.findByUsername(username);
+
+        model.addAttribute("rooms", rooms);
+
         return "rooms";
     }
 
@@ -38,7 +48,14 @@ public class RoomController {
     // Save Room
     @PostMapping("/save-room")
     public String saveRoom(@ModelAttribute Room room) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        room.setUsername(username);
+
         roomRepository.save(room);
+
         return "redirect:/rooms";
     }
 
@@ -54,7 +71,7 @@ public class RoomController {
         return "edit-room";
     }
 
-    // Update Room and Update Booking Room Number
+    // Update Room
     @PostMapping("/update-room/{id}")
     public String updateRoom(@PathVariable Long id, @ModelAttribute Room room) {
 
@@ -64,7 +81,6 @@ public class RoomController {
         String oldRoomNumber = existingRoom.getRoomNumber();
         String newRoomNumber = room.getRoomNumber();
 
-        // Update room details
         existingRoom.setRoomNumber(newRoomNumber);
         existingRoom.setRoomType(room.getRoomType());
         existingRoom.setPrice(room.getPrice());
@@ -72,7 +88,6 @@ public class RoomController {
 
         roomRepository.save(existingRoom);
 
-        // If room number changed → update bookings
         if (!oldRoomNumber.equals(newRoomNumber)) {
 
             List<Booking> bookings = bookingRepository.findByRoomNumber(oldRoomNumber);

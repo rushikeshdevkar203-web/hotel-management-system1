@@ -1,16 +1,18 @@
 package com.hotel.controller;
 
-import com.hotel.entity.Orders;
-import com.hotel.entity.Room;
-import com.hotel.repository.OrderRepository;
-import com.hotel.repository.RoomRepository;
+import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.hotel.entity.Orders;
+import com.hotel.entity.Room;
+import com.hotel.repository.OrderRepository;
+import com.hotel.repository.RoomRepository;
 
 @Controller
 public class BillingController {
@@ -20,7 +22,8 @@ public class BillingController {
 
     @Autowired
     private RoomRepository roomRepository;
-    
+
+    // BILLING PAGE
     @GetMapping("/billing")
     public String billingPage() {
         return "billing";
@@ -28,20 +31,23 @@ public class BillingController {
 
     // GENERATE BILL
     @GetMapping("/generateBill")
-    public String generateBill(@RequestParam String roomNumber, Model model) {
+    public String generateBill(@RequestParam String roomNumber,
+                               Model model,
+                               Principal principal) {
 
-        // Get food orders for this room
-        List<Orders> orders = orderRepository.findByRoomNumber(roomNumber);
+        String username = principal.getName();
+
+        // Get food orders for this room and user
+        List<Orders> orders = orderRepository.findByRoomNumberAndUsername(roomNumber, username);
 
         double foodTotal = 0;
 
-        // Calculate food total
         for (Orders order : orders) {
-            foodTotal += order.getTotalPrice() * order.getQuantity();
+            foodTotal += order.getTotalPrice();
         }
 
-        // Get room details
-        Room room = roomRepository.findByRoomNumber(roomNumber);
+        // Get room details for that user
+        Room room = roomRepository.findByRoomNumberAndUsername(roomNumber, username);
 
         double roomRent = 0;
 
@@ -49,10 +55,10 @@ public class BillingController {
             roomRent = room.getPrice();
         }
 
-        // Calculate total bill
+        // Total bill
         double totalBill = foodTotal + roomRent;
 
-        // Send data to view
+        // Send to view
         model.addAttribute("orders", orders);
         model.addAttribute("roomNumber", roomNumber);
         model.addAttribute("foodTotal", foodTotal);

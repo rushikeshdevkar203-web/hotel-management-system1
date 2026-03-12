@@ -1,14 +1,13 @@
 package com.hotel.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.hotel.entity.Orders;
 import com.hotel.entity.Product;
@@ -26,18 +25,26 @@ public class OrderController {
 
     // OPEN ORDER PAGE
     @GetMapping("/order")
-    public String showOrderPage(Model model){
+    public String showOrderPage(Model model, Principal principal){
 
-        model.addAttribute("products", productRepo.findAll());
+        String username = principal.getName();
+
+        List<Product> products = productRepo.findByUsername(username);
+
+        model.addAttribute("products", products);
 
         return "order";
     }
 
     // SHOW ALL ORDERS
     @GetMapping("/orders")
-    public String viewOrders(Model model){
+    public String viewOrders(Model model, Principal principal){
 
-        model.addAttribute("orders", orderRepo.findAll());
+        String username = principal.getName();
+
+        List<Orders> orders = orderRepo.findByUsername(username);
+
+        model.addAttribute("orders", orders);
 
         return "orders";
     }
@@ -48,7 +55,10 @@ public class OrderController {
                              @RequestParam String customerName,
                              @RequestParam String customerMobile,
                              @RequestParam String roomNumber,
-                             @RequestParam int quantity){
+                             @RequestParam int quantity,
+                             Principal principal){
+
+        String username = principal.getName();
 
         Product product = productRepo.findById(productId).orElse(null);
 
@@ -70,18 +80,26 @@ public class OrderController {
 
             order.setOrderTime(LocalDateTime.now());
 
+            // IMPORTANT
+            order.setUsername(username);
+
             orderRepo.save(order);
         }
 
         return "redirect:/orders";
     }
-    
+
+    // SAVE ORDER (Manual Form)
     @PostMapping("/saveOrder")
-    public String saveOrder(@ModelAttribute Orders order) {
+    public String saveOrder(@ModelAttribute Orders order, Principal principal) {
+
+        String username = principal.getName();
 
         order.setOrderTime(LocalDateTime.now());
 
         order.setTotalPrice(order.getPrice() * order.getQuantity());
+
+        order.setUsername(username);
 
         orderRepo.save(order);
 

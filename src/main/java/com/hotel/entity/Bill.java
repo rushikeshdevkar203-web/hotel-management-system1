@@ -13,6 +13,7 @@ public class Bill {
     private double foodTotal;
     private double roomRent;
     private double finalTotal;
+    private String username;
 
     public Bill() {}
 
@@ -58,4 +59,12 @@ public class Bill {
     public void setFinalTotal(double finalTotal) {
         this.finalTotal = finalTotal;
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }

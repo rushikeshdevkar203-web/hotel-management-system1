@@ -1,16 +1,17 @@
 package com.hotel.controller;
 
-import com.hotel.entity.Booking;
-import com.hotel.entity.Room;
-import com.hotel.repository.BookingRepository;
-import com.hotel.repository.RoomRepository;
+import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.hotel.entity.Booking;
+import com.hotel.entity.Room;
+import com.hotel.repository.BookingRepository;
+import com.hotel.repository.RoomRepository;
 
 @Controller
 public class BookingController {
@@ -23,10 +24,11 @@ public class BookingController {
 
     // OPEN BOOKING PAGE
     @GetMapping("/booking")
-    public String bookingPage(Model model) {
+    public String bookingPage(Model model, Principal principal) {
 
-        // show only available rooms
-        List<Room> rooms = roomRepository.findByStatus("Available");
+        String username = principal.getName();
+
+        List<Room> rooms = roomRepository.findByUsernameAndStatus(username, "Available");
 
         model.addAttribute("rooms", rooms);
 
@@ -40,8 +42,11 @@ public class BookingController {
             @RequestParam String customerName,
             @RequestParam String checkInDate,
             @RequestParam String checkOutDate,
-            @RequestParam Double pricePerDay
+            @RequestParam Double pricePerDay,
+            Principal principal
     ) {
+
+        String username = principal.getName();
 
         Booking booking = new Booking();
 
@@ -51,11 +56,12 @@ public class BookingController {
         booking.setCheckOutDate(checkOutDate);
         booking.setPricePerDay(pricePerDay);
         booking.setStatusMessage("Booked");
+        booking.setUsername(username);
 
         bookingRepository.save(booking);
 
-        // update room status
-        Room room = roomRepository.findByRoomNumber(roomNumber);
+        Room room = roomRepository.findByRoomNumberAndUsername(roomNumber, username);
+
         if (room != null) {
             room.setStatus("Booked");
             roomRepository.save(room);
@@ -66,11 +72,13 @@ public class BookingController {
 
     // SHOW BOOKINGS
     @GetMapping("/bookings")
-    public String viewBookings(Model model) {
+    public String viewBookings(Model model, Principal principal) {
 
-        List<Booking> list = bookingRepository.findAll();
+        String username = principal.getName();
 
-        model.addAttribute("bookings", list);
+        List<Booking> bookings = bookingRepository.findByUsername(username);
+
+        model.addAttribute("bookings", bookings);
 
         return "bookings";
     }
@@ -84,10 +92,12 @@ public class BookingController {
         if (booking != null) {
 
             String roomNumber = booking.getRoomNumber();
+            String username = booking.getUsername();
 
             bookingRepository.deleteById(id);
 
-            Room room = roomRepository.findByRoomNumber(roomNumber);
+            Room room = roomRepository.findByRoomNumberAndUsername(roomNumber, username);
+
             if (room != null) {
                 room.setStatus("Available");
                 roomRepository.save(room);
@@ -101,16 +111,20 @@ public class BookingController {
     @GetMapping("/editBooking/{id}")
     public String editBooking(@PathVariable Long id, Model model) {
 
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID"));
+        Booking booking = bookingRepository.findById(id).orElse(null);
 
-        List<Room> rooms = roomRepository.findAll();
+        if (booking == null) {
+            return "redirect:/bookings";
+        }
+
+        List<Room> rooms = roomRepository.findByUsername(booking.getUsername());
 
         model.addAttribute("booking", booking);
         model.addAttribute("rooms", rooms);
 
         return "edit-booking";
     }
+
     // UPDATE BOOKING
     @PostMapping("/updateBooking/{id}")
     public String updateBooking(@PathVariable Long id, @ModelAttribute Booking booking) {
@@ -118,18 +132,22 @@ public class BookingController {
         Booking existingBooking = bookingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID"));
 
+        String username = existingBooking.getUsername();
+
         String oldRoomNumber = existingBooking.getRoomNumber();
         String newRoomNumber = booking.getRoomNumber();
 
         // old room available
-        Room oldRoom = roomRepository.findByRoomNumber(oldRoomNumber);
+        Room oldRoom = roomRepository.findByRoomNumberAndUsername(oldRoomNumber, username);
+
         if (oldRoom != null) {
             oldRoom.setStatus("Available");
             roomRepository.save(oldRoom);
         }
 
         // new room booked
-        Room newRoom = roomRepository.findByRoomNumber(newRoomNumber);
+        Room newRoom = roomRepository.findByRoomNumberAndUsername(newRoomNumber, username);
+
         if (newRoom != null) {
             newRoom.setStatus("Booked");
             roomRepository.save(newRoom);
@@ -145,4 +163,4 @@ public class BookingController {
 
         return "redirect:/bookings";
     }
-} 
+}

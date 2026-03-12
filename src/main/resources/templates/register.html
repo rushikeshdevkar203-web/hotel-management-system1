@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<title>User Register</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+/* Background Image */
+
+background-image:url('/images/hotel-bg.jpg');
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+/* Glass Form */
+
+.form-box{
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(15px);
+padding:35px;
+width:350px;
+border-radius:12px;
+box-shadow:0 8px 32px rgba(0,0,0,0.3);
+color:rgb(0, 0, 0);
+}
+
+/* Heading */
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+/* Inputs */
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:6px;
+outline:none;
+}
+
+/* Button */
+
+button{
+width:100%;
+padding:10px;
+background:#007bff;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+/* Link */
+
+a{
+display:block;
+text-align:center;
+margin-top:12px;
+color:white;
+text-decoration:none;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="form-box">
+
+<h2>User Register</h2>
+
+<form th:action="@{/register}" method="post">
+
+<input type="text" name="username" placeholder="Enter Username" required>
+
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<button type="submit">Register</button>
+
+</form>
+
+<a th:href="@{/login}">Already have account? Login</a>
+
+</div>
+
+</body>
+</html>

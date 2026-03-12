@@ -20,6 +20,8 @@ public class Orders {
     private String customerMobile;
     private String roomNumber;
 
+    private String username;
+
     private LocalDateTime orderTime;
 
     // ---------------- GETTERS ----------------
@@ -110,4 +112,12 @@ public class Orders {
             this.totalPrice = price * quantity;
         }
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }

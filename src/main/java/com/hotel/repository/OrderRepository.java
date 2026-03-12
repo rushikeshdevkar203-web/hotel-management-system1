@@ -10,4 +10,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     List<Orders> findByRoomNumber(String roomNo);
 
+	List<Orders> findByUsername(String username);
+
+	List<Orders> findByRoomNumberAndUsername(String roomNumber, String username);
+
 }

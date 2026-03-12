@@ -22,7 +22,10 @@ public class Booking {
 
     private Double pricePerDay;
 
-    private String statusMessage;   // ✅ FIX HERE
+    private String statusMessage; 
+    
+    private String username; 
+    // ✅ FIX HERE
 
     // getters setters
 
@@ -77,4 +80,12 @@ public class Booking {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }

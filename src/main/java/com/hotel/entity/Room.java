@@ -10,6 +10,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+  
     @Column(name = "room_no")
     private String roomNumber;
 
@@ -19,7 +20,9 @@ public class Room {
     private double price;
 
     private String status;
-
+    
+    private String username;
+    
     // Getters and Setters
 
     public Long getId() {
@@ -60,6 +63,14 @@ public class Room {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
